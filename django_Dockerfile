@@ -1,0 +1,7 @@
+FROM python:alpine
+RUN apk update && \
+    apk upgrade --no-cache && \
+    apk add --no-cache gcc libc-dev postgresql-dev
+WORKDIR /home/www
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install poetry

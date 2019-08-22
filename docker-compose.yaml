@@ -1,0 +1,51 @@
+version: '3'
+services:
+  # server:
+  #   restart: always
+  #   tty: true
+  #   build:
+  #     context: ./docker/nginx
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:80"
+  #     - "4430:443"
+  #   volumes:
+  #     - ./application/static:/var/www/html/static
+  #     - ./application/media:/var/www/html/media
+  #     - ./docker/var/sock:/var/sock
+  #     - ./docker/var/log/nginx:/var/log/nginx
+  #     - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - db
+  #     - app
+  app:
+    build:
+      context: .
+      dockerfile: django_Dockerfile
+    tty: true
+    # command: "/var/www/html/docker/django/start-server.sh"
+    env_file: .env
+    environment:
+      TZ: ${TZ}
+      DJANGO_ENV: ${DJANGO_ENV}
+      DATABASE_HOST: rdb
+    ports:
+      - 8000:8000
+    volumes:
+      - ./src:/home/www
+    depends_on:
+      - rdb
+  rdb:
+    image: postgres:alpine
+    tty: true
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: ${TZ}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/rdb/data:/var/lib/postgresql/data
+      - ./docker/rdb/initdb:/docker-entrypoint-initdb.d
