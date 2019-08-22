@@ -13,14 +13,14 @@ class Command(BaseCommand):
 
         permission = [
             {
-                'model': 'app.permission',
+                'model': 'app.samplepermission',
                 'pk': 1,
                 'fields': {
                     'permission': 'administrator'
                 }
             },
             {
-                'model': 'app.permission',
+                'model': 'app.samplepermission',
                 'pk': 2,
                 'fields': {
                     'permission': 'user'
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
         user = [
             {
-                'model': 'app.user',
+                'model': 'app.sampleuser',
                 'pk': i,
                 'fields': {
                     'name': f'user{i}',

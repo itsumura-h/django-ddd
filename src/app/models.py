@@ -3,18 +3,18 @@ from django.db import models
 # Create your models here.
 
 
-class Permission(models.Model):
+class SamplePermission(models.Model):
     def __str__(self):
         return str(self.permission)
 
     permission = models.CharField(max_length=255)
 
     class Meta:
-        db_table = 'permissions'
-        verbose_name_plural = 'Permissions'
+        db_table = 'sample_permissions'
+        verbose_name_plural = 'SamplePermissions'
 
 
-class User(models.Model):
+class SampleUser(models.Model):
     def __str__(self):
         return str(self.name)
 
@@ -22,10 +22,10 @@ class User(models.Model):
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     birth_date = models.DateField()
-    permission = models.ForeignKey(Permission, on_delete=models.PROTECT)
+    permission = models.ForeignKey(SamplePermission, on_delete=models.PROTECT)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
 
     class Meta:
-        db_table = 'users'
-        verbose_name_plural = 'Users'
+        db_table = 'sample_users'
+        verbose_name_plural = 'SampleUsers'

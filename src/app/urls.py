@@ -1,16 +1,17 @@
 from django.urls import path, include
+from .views.sample_user_views import SampleUserViews
 
 
-# sample_urls = [
-#     path('', SmapleViews.index),
-#     path('create/', SmapleViews.create),
-#     path('store/', SmapleViews.store),
-#     path('<int:id>/', SmapleViews.show),
-#     path('<int:id>/edit/', SmapleViews.edit),
-#     path('<int:id>/update/', SmapleViews.update),
-#     path('<int:id>/destroy/', SmapleViews.destroy),
-# ]
+sample_urls = [
+    path('', SampleUserViews.index),
+    path('create/', SampleUserViews.create),
+    path('store/', SampleUserViews.store),
+    path('<int:id>/', SampleUserViews.show),
+    path('<int:id>/edit/', SampleUserViews.edit),
+    path('<int:id>/update/', SampleUserViews.update),
+    path('<int:id>/destroy/', SampleUserViews.destroy),
+]
 
 app_urls = [
-    # path('samples/', include(sample_urls)),
+    path('sample/', include(sample_urls)),
 ]
