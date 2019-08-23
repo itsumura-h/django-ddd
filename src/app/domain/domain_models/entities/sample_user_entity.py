@@ -41,7 +41,6 @@ class SampleUserEntity:
             'updated_at': self.updated_at.get_label()
         }
 
-
     def get_show_dict(self):
         return {
             'id': self.id,
@@ -58,7 +57,7 @@ class SampleUserEntity:
             'id': self.id,
             'name': self.name,
             'email': self.email.get_label(),
-            'permission': self.permission.get_ja_label(),
+            'permission_id': self.permission_id,
             'birth_date': self.birth_date.get_str_number(),
         }
 
@@ -71,7 +70,7 @@ class SampleUserEntity:
             'birth_date': self.birth_date.get_date(),
             'updated_at': self.updated_at.get_label()
         }
-    
+
 
 class SamplePermissionEntity:
     def __init__(self, id: int = None, permission: str = None):
@@ -80,6 +79,6 @@ class SamplePermissionEntity:
 
     def get_create_dict(self):
         return {
-            'id': str(self.id),
+            'id': int(self.id),
             'permission': self.permission.get_ja_label()
         }

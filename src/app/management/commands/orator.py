@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 import re
 import os
 
+
 class Command(BaseCommand):
-    help = "Oratorのクラスを作ります。引数は頭文字大文字の英単語単数形で入力してください"
+    help = 'Oratorのクラスを作ります。引数は頭文字大文字の英単語単数形で入力してください'
 
     def add_arguments(self, parser):
         parser.add_argument('Model', nargs='+')

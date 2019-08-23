@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 import re
 import os
 
+
 class Command(BaseCommand):
-    help = "DDDのためのファイルを作ります。引数はキャメルケースで入力してください"
+    help = 'DDDのためのファイルを作ります。引数はキャメルケースで入力してください'
 
     @staticmethod
     def to_sname(name):
@@ -97,7 +98,7 @@ class {Domain}Views:
 
         # ファイルが存在していたらエラー
         if os.path.exists(views_path):
-            print (f'{views_path}は既に存在しています')
+            print(f'{views_path}は既に存在しています')
         else:
             with open(views_path, 'w') as f:
                 f.write(content)
@@ -136,7 +137,7 @@ class {Domain}Service:
 
         # ファイルが存在していたらエラー
         if os.path.exists(serivce_path):
-            print (f'{serivce_path}は既に存在しています')
+            print(f'{serivce_path}は既に存在しています')
         else:
             with open(serivce_path, 'w') as f:
                 f.write(content)
@@ -153,7 +154,7 @@ class {Domain}Entity:
 '''
         # ファイルが存在していたらエラー
         if os.path.exists(entity_path):
-            print (f'{entity_path}は既に存在しています')
+            print(f'{entity_path}は既に存在しています')
         else:
             with open(entity_path, 'w') as f:
                 f.write(content)
@@ -167,7 +168,7 @@ class {Domain}Entity:
 
         # ファイルが存在していたらエラー
         if os.path.exists(repository_path):
-            print (f'{repository_path}は既に存在しています')
+            print(f'{repository_path}は既に存在しています')
         else:
             with open(repository_path, 'w') as f:
                 f.write(content)

@@ -1,0 +1,41 @@
+<h1>新規作成ページ</h1>
+<p><a href="../">戻る</a></p>
+{% if error %}
+  <mark>{{ error }}</mark>
+{% endif %}
+<form action="/sample/store/" method="POST">
+  {% csrf_token %}
+  <table border="1">
+    <tr>
+      <td>名前</td>
+      <td><input type="text" name="name" value="{{old.name}}"></td>
+    </tr>
+    <tr>
+      <td>email</td>
+      <td><input type="text" name="email" value="{{old.email}}"></td>
+    </tr>
+    <tr>
+      <td>生年月日</td>
+      <td><input type="text" name="birth_date" value="{{old.birth_date}}"></td>
+    </tr>
+    <tr>
+      <td>権限</td>
+      <td>
+        <select name="permission_id">
+          <option>選択してください</option>
+          {% for permission in data.permissions %}
+            <option
+              value="{{permission.id}}"
+              {% if old.permission_id == permission.id %}
+                selected
+              {% endif %}
+            >
+              {{permission.permission}}
+            </option>
+          {% endfor %}
+        </select>
+      </td>
+    </tr>
+  </table>
+  <button type="submit">送信</button>
+</form>

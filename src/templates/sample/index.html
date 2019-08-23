@@ -1,1 +1,27 @@
-index
+<h1>一覧ページ</h1>
+<p><a href="/sample/create/">新規作成</a></p>
+<table border="1">
+  <tr>
+    <th>id</th>
+    <th>名前</th>
+    <th>email</th>
+    <th>権限</th>
+    <th>詳細</th>
+    <th>削除</th>
+  </tr>
+  {% for user in users %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.permission }}</td>
+      <td><a href="/sample/{{ user.id }}/">詳細</a></td>
+      <td>
+        <form action="/sample/{{ user.id }}/destroy/" method="POST">
+          {% csrf_token %}
+          <button type="submit">削除</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+</table>

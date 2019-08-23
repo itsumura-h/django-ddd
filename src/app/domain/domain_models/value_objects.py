@@ -44,8 +44,11 @@ class PermissionValueObject:
 class DatetimeValueObject:
     def __init__(self, value):
         if isinstance(value, str):
+            # 整形
+            value = value.split('+')[0]
             self.__value = datetime.strptime(
-                value, '%Y-%m-%dT%H:%M:%S.%f+00:00'
+                value,
+                '%Y-%m-%dT%H:%M:%S.%f'
             )
         elif isinstance(value, datetime):
             self.__value = value

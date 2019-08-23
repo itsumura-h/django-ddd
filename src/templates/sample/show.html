@@ -1,0 +1,39 @@
+<h1>詳細ページ</h1>
+<p><a href="../">戻る</a></p>
+<p><a href="/sample/{{ user.id }}/edit/">編集</a></p>
+<p>
+  <form action="/sample/{{ user.id }}/destroy/" method="POST">
+    {% csrf_token %}
+    <button type="submit">削除</button>
+  </form>
+</p>
+<table border="1">
+  <tr>
+    <td>id</td>
+    <td>{{ user.id }}</td>
+  </tr>
+  <tr>
+    <td>名前</td>
+    <td>{{ user.name }}</td>
+  </tr>
+  <tr>
+    <td>email</td>
+    <td>{{ user.email }}</td>
+  </tr>
+  <tr>
+    <td>年齢</td>
+    <td>{{ user.age }}</td>
+  </tr>
+  <tr>
+    <td>権限</td>
+    <td>{{ user.permission }}</td>
+  </tr>
+  <tr>
+    <td>作成日時</td>
+    <td>{{ user.created_at }}</td>
+  </tr>
+  <tr>
+    <td>更新日時</td>
+    <td>{{ user.updated_at }}</td>
+  </tr>
+</table>
