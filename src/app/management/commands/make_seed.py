@@ -1,8 +1,10 @@
 import json
+import random
 from django.core.management.base import BaseCommand
+from faker import Faker
+
 from datetime import datetime
 from django.contrib.auth.hashers import make_password
-from faker import Faker
 
 
 class Command(BaseCommand):
@@ -36,8 +38,8 @@ class Command(BaseCommand):
                     'name': f'user{i}',
                     'email': f'user{i}@gmail.com',
                     'password': make_password(f'Password{i}'),
-                    'birth_date': fake.date_between(start_date='-60y', end_date='today').isoformat(),
                     'permission': 1 if i % 2 == 0 else 2,
+                    'birth_date': fake.date_between(start_date='-60y', end_date='-20y').isoformat(),
                     'created_at': str(datetime.now()),
                     'updated_at': str(datetime.now())
                 }
@@ -45,11 +47,6 @@ class Command(BaseCommand):
         ]
 
         data = permission + user
-
-        # 自由に作って
-        # data = {
-
-        # }
 
         seeder_path = 'app/fixtures/seed.json'
         with open(seeder_path, 'w') as f:

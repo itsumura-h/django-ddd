@@ -1,12 +1,12 @@
 import logging
-import environ
+# import environ
 
 from orator import DatabaseManager
 from orator import Model
 from django.conf import settings
 
 
-env = environ.Env()
+# env = environ.Env()
 
 config = {
     'default': 'database',

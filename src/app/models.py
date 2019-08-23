@@ -10,8 +10,8 @@ class SamplePermission(models.Model):
     permission = models.CharField(max_length=255)
 
     class Meta:
-        db_table = 'sample_permissions'
-        verbose_name_plural = 'SamplePermissions'
+        db_table = 'sample_permissions'  # テーブル名
+        verbose_name_plural = 'SamplePermissions'  # 複数形の時の名前
 
 
 class SampleUser(models.Model):
@@ -21,8 +21,8 @@ class SampleUser(models.Model):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
-    birth_date = models.DateField()
     permission = models.ForeignKey(SamplePermission, on_delete=models.PROTECT)
+    birth_date = models.DateField()
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
 

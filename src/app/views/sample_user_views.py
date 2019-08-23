@@ -1,11 +1,12 @@
 from django.shortcuts import redirect, render
 from rest_framework.decorators import api_view
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 
-from ..domain.services.sample_user_service import SampleUserService
+from ..domain.services.domain_services.sample_user_service import SampleUserService
 
 # Create your views here.
 
-class SampleUserViews:
+class SampleViews:
     @api_view(['GET'])
     def index(request):
         """全件表示ページ
@@ -14,7 +15,7 @@ class SampleUserViews:
             request ([type]): [description]
         """
         users = SampleUserService.index()
-        return render(request, 'sample/index.html')
+        return render(request, 'sample/index.html', {'users': users})
 
     @api_view(['GET'])
     def create(request):
@@ -23,7 +24,8 @@ class SampleUserViews:
         Args:
             request ([type]): [description]
         """
-        pass
+        permissions = SampleUserService.create()
+        return render(request, 'sample/create.html', {'permissions': permissions})
 
     @api_view(['POST'])
     def store(request):
@@ -32,7 +34,35 @@ class SampleUserViews:
         Args:
             request ([type]): [description]
         """
-        pass
+        try:
+            name = request.POST['name']
+            email = request.POST['email']
+            birth_date = request.POST['birth_date']
+            permission_id = request.POST['permission']
+
+            params = {
+                'name': name,
+                'email': email,
+                'birth_date': birth_date,
+                'permission_id': permission_id
+            }
+            SampleUserService.store(params)
+            return redirect('/sample/')
+        except Exception as e:
+            # エラーの時
+            permissions = SampleUserService.create()
+            params = {
+                'permissions': permissions,
+                'error': str(e),
+                'old': {
+                    'name': name,
+                    'email': email,
+                    'birth_date': birth_date,
+                    'permission': permission_id
+                }
+            }
+
+            return render(request, 'sample/create.html', params)
 
     @api_view(['GET'])
     def show(request, id: int):
@@ -42,7 +72,8 @@ class SampleUserViews:
             request ([type]): [description]
             id (int): primary_key
         """
-        pass
+        user = SampleUserService.show(id)
+        return render(request, 'sample/show.html', {'user': user})
 
     @api_view(['GET'])
     def edit(request, id: int):
