@@ -3,7 +3,7 @@
 {% if error %}
   <mark>{{ error }}</mark>
 {% endif %}
-<form action="/sample/{{data.user.id}}/update" method="POST">
+<form action="/sample/{{data.user.id}}/update/" method="POST">
   {% csrf_token %}
   <table border="1">
     <tr>

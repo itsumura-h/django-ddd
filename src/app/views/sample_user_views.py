@@ -52,13 +52,13 @@ class SampleUserViews:
             name = request.POST['name']
             email = request.POST['email']
             birth_date = request.POST['birth_date']
-            permission_id = request.POST['permission_id']
+            permission_id = int(request.POST['permission_id'])
 
             params = {
                 'name': name,
                 'email': email,
                 'birth_date': birth_date,
-                'permission_id': int(permission_id)
+                'permission_id': permission_id
             }
             SampleUserService.store(params)
             return redirect('/sample/')
@@ -70,7 +70,7 @@ class SampleUserViews:
                     'name': name,
                     'email': email,
                     'birth_date': birth_date,
-                    'permission_id': int(permission_id)
+                    'permission_id': permission_id
                 },
                 'data': {
                     'permissions': permissions,
@@ -119,7 +119,7 @@ class SampleUserViews:
             name = request.POST['name']
             email = request.POST['email']
             birth_date = request.POST['birth_date']
-            permission_id = request.POST['permission']
+            permission_id = int(request.POST['permission_id'])
 
             params = {
                 'name': name,
