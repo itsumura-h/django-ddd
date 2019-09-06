@@ -1,6 +1,9 @@
 
 from django.urls import path, include
 from .views.sample_user_views import SampleUserViews
+from .views.web_sample_views import WebSampleViews
+
+from .views.test_views import TestViews
 
 sample_urls = [
     path('', SampleUserViews.index),
@@ -12,6 +15,14 @@ sample_urls = [
     path('<int:id>/destroy/', SampleUserViews.destroy),
 ]
 
+web_sample_urls = [
+    path('', WebSampleViews.index),
+    path('VueInstalled/', WebSampleViews.vue_installed),
+    path('checkform/', WebSampleViews.checkform),
+]
+
+
 app_urls = [
     path('sample/', include(sample_urls)),
+    path('WebSample/', include(web_sample_urls),)
 ]

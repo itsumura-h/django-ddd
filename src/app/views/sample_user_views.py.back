@@ -2,12 +2,14 @@ from django.shortcuts import redirect, render
 from rest_framework.decorators import api_view
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 
-# from ..domain.services.domain_services.sample_user_service import (
-#     SampleUserService
-# )
-from ..domain.sample_users.service import Service as SampleUserService
+from ..domain.services.domain_services.sample_user_service import (
+    SampleUserService
+)
+from pprint import pprint
+
 
 # Create your views here.
+
 
 class SampleUserViews:
     @api_view(['GET'])
