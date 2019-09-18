@@ -3,5 +3,6 @@ RUN apk update && \
     apk upgrade --no-cache && \
     apk add --no-cache gcc libc-dev postgresql-dev
 WORKDIR /home/www
-RUN pip install --upgrade pip setuptools wheel && \
-    pip install poetry
+RUN pip install --upgrade --trusted-host=pypi.org --trusted-host=pypi.python.org --trusted-host=files.pythonhosted.org pip setuptools wheel && \
+    pip install --upgrade --trusted-host=pypi.org --trusted-host=pypi.python.org --trusted-host=files.pythonhosted.org \
+    poetry django djangorestframework django-extensions django-environ orator psycopg2-binary pylint pyformat bpython

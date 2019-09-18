@@ -1,5 +1,5 @@
-from ..orator.sample.sample_user import SampleUser
-from ..orator.sample.sample_permission import SamplePermission
+from ..orator.user import User
+from ..orator.permission import Permission
 
 
 class SampleUserRepository:
@@ -11,16 +11,16 @@ class SampleUserRepository:
         Returns:
             List[user] -- ユーザー
         """
-        return SampleUser \
+        return User \
             .select(
-                'sample_users.id', 'sample_users.name', 'sample_users.email',
-                'sample_permissions.permission'
+                'users.id', 'users.name', 'users.email',
+                'permissions.permission'
             ) \
             .join(
-                'sample_permissions',
-                'sample_users.permission_id',
+                'permissions',
+                'users.permission_id',
                 '=',
-                'sample_permissions.id'
+                'permissions.id'
             ) \
             .get() \
             .serialize()
@@ -28,7 +28,7 @@ class SampleUserRepository:
     @staticmethod
     def create():
         """新規作成画面に必要なデータを取得するリポジトリ."""
-        permissions = SampleUserRepository.get_sample_permissions()
+        permissions = SampleUserRepository.get_permissions()
         params = {
             'permissions': permissions
         }
@@ -36,7 +36,7 @@ class SampleUserRepository:
 
     @staticmethod
     def store(params):
-        return SampleUser.insert(**params)
+        return User.insert(**params)
 
     @staticmethod
     def show(id):
@@ -48,29 +48,29 @@ class SampleUserRepository:
         Returns:
             Dict{user} -- ユーザー
         """
-        return SampleUser \
+        return User \
             .select(
-                'sample_users.id', 'sample_users.name', 'sample_users.email',
-                'sample_users.birth_date', 'sample_users.created_at',
-                'sample_users.updated_at', 'sample_permissions.permission'
+                'users.id', 'users.name', 'users.email',
+                'users.birth_date', 'users.created_at',
+                'users.updated_at', 'permissions.permission'
             ) \
             .join(
-                'sample_permissions',
-                'sample_users.permission_id',
+                'permissions',
+                'users.permission_id',
                 '=',
-                'sample_permissions.id'
+                'permissions.id'
             ) \
             .find(id) \
             .serialize()
 
     @staticmethod
     def edit(id):
-        return SampleUser.find(id).serialize()
+        return User.find(id).serialize()
 
     @staticmethod
     def update(params):
         print(params)
-        return SampleUser \
+        return User \
             .where('id', params['id']) \
             .update(**params)
 
@@ -84,8 +84,8 @@ class SampleUserRepository:
         Returns:
             bool -- 成功:True 失敗:False
         """
-        return SampleUser.find(id).delete()
+        return User.find(id).delete()
 
     @staticmethod
-    def get_sample_permissions():
-        return SamplePermission.all().serialize()
+    def get_permissions():
+        return Permission.all().serialize()

@@ -11,18 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# 環境変数の読み込み
-env = environ.Env()
-
-try:
-    DJANGO_ENV = env("DJANGO_ENV")
-except Exception:
-    DJANGO_ENV = "local"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -31,16 +23,9 @@ except Exception:
 SECRET_KEY = 'h7$!9hbci5u0g@tlr5p38788mpkj-6#afka!9g&p0*_4d%$$a%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if DJANGO_ENV == "production":
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = True
 
-if DJANGO_ENV == "local" or DJANGO_ENV == "dev":
-    ALLOWED_HOSTS = ["*"]
-else:
-    ALLOWED_HOSTS = ["nginx-internal-sock"] + env("ALLOWED_HOSTS").split(",")
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -52,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 3rd party
-    "debug_toolbar",
     "django_extensions",
     "rest_framework",
     # My Application
@@ -67,7 +51,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -103,9 +86,9 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
+        "NAME": 'ddd_sample_db',
+        "USER": 'root',
+        "PASSWORD": 'password',
         "HOST": 'rdb',
         "PORT": 5432
     }
@@ -138,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "ja"
 
 # TIME_ZONE = 'UTC'
-TIME_ZONE = env("TZ")
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 

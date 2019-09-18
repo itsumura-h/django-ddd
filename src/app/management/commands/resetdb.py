@@ -12,5 +12,5 @@ class Command(BaseCommand):
         subprocess.call(['touch', 'app/migrations/__init__.py'])
         subprocess.call(['python', 'manage.py', 'makemigrations'])
         subprocess.call(['python', 'manage.py', 'migrate'])
-        subprocess.call(['python', 'manage.py', 'make_seed'])
-        subprocess.call(['python', 'manage.py', 'loaddata', 'seed.json'])
+        subprocess.call(['python', 'manage.py', 'runseed'])
+

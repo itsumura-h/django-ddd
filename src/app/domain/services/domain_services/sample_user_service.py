@@ -69,7 +69,7 @@ class SampleUserService:
         user = SampleUserRepository.edit(id)
         user = SampleUserEntity(**user).get_edit_dict()
         print(user)
-        permissions = SampleUserRepository.get_sample_permissions()
+        permissions = SampleUserRepository.get_permissions()
         permissions = [
             SamplePermissionEntity(**val).get_create_dict()
             for val in permissions

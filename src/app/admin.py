@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import SamplePermission, SampleUser
+from .models import Permission, User
 
 # Register your models here.
-admin.site.register(SamplePermission)
-admin.site.register(SampleUser)
+admin.site.register(Permission)
+admin.site.register(User)
