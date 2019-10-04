@@ -1,0 +1,14 @@
+FROM node:alpine
+
+RUN apk update && \
+    apk upgrade --no-cache
+
+RUN yarn config set strict-ssl false
+
+WORKDIR /home
+RUN yarn global add @vue/cli
+ENV PATH $PATH:/home/node_modules/.bin
+
+# COPY ./frontend/www/package.json /home/www
+# COPY ./frontend/www/yarn.lock /home/www
+# RUN yarn install

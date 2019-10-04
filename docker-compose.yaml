@@ -8,22 +8,34 @@ services:
     environment:
       DATABASE_HOST: rdb
     ports:
-      - 8000:8000
+      - 8001:8000
     volumes:
       - ./src:/home/www
-    depends_on:
-      - rdb
-  rdb:
-    image: postgres:alpine
+    # depends_on:
+    #   - rdb
+
+  frontend: # Vue
+    build:
+      context: .
+      dockerfile: frontend_Dockerfile
     tty: true
-    environment:
-      POSTGRES_DB: ddd_sample_db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-      TZ: Asia/Tokyo
     volumes:
-      - ddd_sample_db:/var/lib/postgresql/data
-      - ./docker/rdb/initdb:/docker-entrypoint-initdb.d
+      - ./frontend:/home
+    ports:
+      - "8000:8000" # Vue UI
+      - "8080:8080" # Dev server
+
+  # rdb:
+  #   image: postgres:alpine
+  #   tty: true
+  #   environment:
+  #     POSTGRES_DB: ddd_sample_db
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: password
+  #     TZ: Asia/Tokyo
+  #   volumes:
+  #     - ddd_sample_db:/var/lib/postgresql/data
+  #     - ./docker/rdb/initdb:/docker-entrypoint-initdb.d
 
 volumes:
   ddd_sample_db:
