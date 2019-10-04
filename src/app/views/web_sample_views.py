@@ -1,7 +1,7 @@
 import json
 from datetime import date
 from django.shortcuts import redirect, render
-from app.orator.sample.sample_user import SampleUser
+from app.orator.user import User
 
 
 class WebSampleViews:
@@ -9,7 +9,7 @@ class WebSampleViews:
         return render(request, 'web_sample/index.html')
 
     def vue_installed(request):
-        users = json.dumps(SampleUser.select(
+        users = json.dumps(User.select(
             'id', 'name', 'email').get().serialize())
         headers = json.dumps([
             {'text': 'id', 'value': 'id'},

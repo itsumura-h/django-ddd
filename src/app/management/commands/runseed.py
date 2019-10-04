@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 'name': f'user{i}',
                 'email': f'user{i}@gmail.com',
                 'password': make_password(f'Password{i}'),
-                'permission': 1 if i % 2 == 0 else 2,
+                'permission_id': 1 if i % 2 == 0 else 2,
                 'birth_date': fake.date_between(start_date='-60y', end_date='-20y').isoformat(),
                 'created_at': str(datetime.now()),
                 'updated_at': str(datetime.now())
