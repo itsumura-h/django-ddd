@@ -29,6 +29,6 @@ web_sample_urls = [
 
 app_urls = [
     # path('sample/', include(sample_urls)),
-    path('ddd_sample/', include(ddd_sample_urls)),
+    path('api/ddd_sample/', include(ddd_sample_urls)),
     path('WebSample/', include(web_sample_urls)),
 ]
