@@ -2,8 +2,30 @@ from django.shortcuts import redirect, render
 from rest_framework.decorators import api_view
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 
-from 
+from app.domain.services.ddd_sample_service import DDDSampleService
 
 class DDDSample:
     def index(request):
-        pass
+        users = DDDSampleService.index()
+        users = [
+            {
+                'id': val['id'],
+                'name': val['name'],
+                'email': val['email'].get_label(),
+                'permission': val['permission'].get_ja_label(),
+                'age': val['birth_date_db'].get_age()
+            }
+            for val in users
+        ]
+        return JsonResponse({'data': users})
+
+    def show(request, id):
+        user = DDDSampleService.show(id)
+        user = {
+            'id': user['id'],
+            'name': user['name'],
+            'email': user['email'].get_label(),
+            'permission': user['permission'].get_ja_label(),
+            'age': user['birth_date_db'].get_age()
+        }
+        return JsonResponse({'data': user})

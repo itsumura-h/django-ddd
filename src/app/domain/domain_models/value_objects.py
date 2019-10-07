@@ -92,3 +92,29 @@ class BirthdateValueObject:
         diff_days = (today - self.__value).days
         diff_year = math.floor(diff_days / 365)
         return diff_year
+
+
+class BirthdateDBValueObject:
+    def __init__(self, value):
+        if isinstance(value, str):
+            self.__value = datetime.strptime(value, '%Y-%m-%d')
+            print(self.__value)
+
+    def get_date(self):
+        return self.__value.isoformat()
+
+    def get_str_number(self):
+        y = str(self.__value.year)
+        m = str(self.__value.month).zfill(2)
+        d = str(self.__value.day).zfill(2)
+        return f'{y}{m}{d}'
+
+    def get_age(self):
+        today = datetime.today()
+        diff_days = (today - self.__value).days
+        diff_year = math.floor(diff_days / 365)
+        return diff_year
+
+class BirthdateInputValueObject:
+    def __init__(self, value):
+        self.__value = value

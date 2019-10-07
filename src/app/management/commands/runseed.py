@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
         User.insert([
             {
-                'id': i,
+                # 'id': i,
                 'name': f'user{i}',
                 'email': f'user{i}@gmail.com',
                 'password': make_password(f'Password{i}'),
