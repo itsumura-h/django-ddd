@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 
 from app.domain.services.ddd_sample_service import DDDSampleService
 
+
 class DDDSample:
     def index(request):
         users = DDDSampleService.index()
@@ -17,7 +18,7 @@ class DDDSample:
             }
             for val in users
         ]
-        return JsonResponse({'data': users})
+        return JsonResponse({'value': users})
 
     def show(request, id):
         user = DDDSampleService.show(id)
@@ -28,4 +29,4 @@ class DDDSample:
             'permission': user['permission'].get_ja_label(),
             'age': user['birth_date_db'].get_age()
         }
-        return JsonResponse({'data': user})
+        return JsonResponse({'value': user})

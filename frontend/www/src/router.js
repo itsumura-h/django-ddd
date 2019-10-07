@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Top from './components/Top'
 import Index from './components/ddd_sample/Index'
 import Create from './components/ddd_sample/Create'
-import { brotliCompress } from 'zlib'
+// import { brotliCompress } from 'zlib'
 
 Vue.use(Router)
 

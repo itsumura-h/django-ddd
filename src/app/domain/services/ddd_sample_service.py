@@ -4,15 +4,13 @@ from app.domain.domain_models.entities.ddd_sample_entity import DDDSampleEntity
 class DDDSampleService:
     def index():
         users = DDDSampleRpository.index()
+        print(users)
         users = [
             DDDSampleEntity(
                 id=val['id'],
                 name=val['name'],
                 email=val['email'],
-                password=val['password'],
                 birth_date_db=val['birth_date'],
-                created_at=val['created_at'],
-                updated_at=val['updated_at'],
                 permission_id=val['permission_id'],
                 permission=val['permission']
             ).to_dict()

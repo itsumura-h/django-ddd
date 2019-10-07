@@ -5,4 +5,4 @@ RUN apk update && \
 WORKDIR /home/www
 RUN pip install --upgrade --trusted-host=pypi.org --trusted-host=pypi.python.org --trusted-host=files.pythonhosted.org pip setuptools wheel && \
     pip install --upgrade --trusted-host=pypi.org --trusted-host=pypi.python.org --trusted-host=files.pythonhosted.org \
-    poetry django djangorestframework django-extensions django-environ orator psycopg2-binary pylint pyformat bpython
+    poetry django djangorestframework django-cors-headers django-extensions django-environ orator psycopg2-binary pylint pyformat bpython
