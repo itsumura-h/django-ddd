@@ -3,10 +3,10 @@
     <h1>index</h1>
     <table border="1">
       <tr>
-        <th>id</th><th>名前</th><th>メールアドレス</th><th>年齢</th>
+        <th>id</th><th>名前</th><th>メールアドレス</th><th>年齢</th><th>権限</th>
       </tr>
       <tr v-for="row in indexData" :key="row.id" @click.stop="openEditDialog(row.id)">
-        <td>{{row.id}}</td><td>{{row.name}}</td><td>{{row.email}}</td><td>{{row.age}}</td>
+        <td>{{row.id}}</td><td>{{row.name}}</td><td>{{row.email}}</td><td>{{row.age}}</td><td>{{row.permission}}</td>
       </tr>
     </table>
 
@@ -23,29 +23,40 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field label="名前*" :value="showData.name" required></v-text-field>
+                <v-text-field
+                  label="名前"
+                  v-model="showData.name"
+                  required
+                />
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Email*" :value="showData.email" required></v-text-field>
+                <v-text-field
+                  label="Email"
+                  v-model="showData.email"
+                  required
+                />
               </v-col>
               <v-col cols="12">
-                <v-text-field label="生年月日*" required></v-text-field>
+                <v-text-field
+                  label="生年月日"
+                  v-model="showData.birth_date"
+                  required
+                />
               </v-col>
               <v-col cols="12">
                 <v-select
+                  label="権限"
+                  v-model="showData.permission"
                   :items="info"
-                  label="権限*"
                   required
-                ></v-select>
+                />
               </v-col>
             </v-row>
           </v-container>
-          <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="save">更新</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -59,10 +70,9 @@ export default {
   name: 'Index',
   data () {
     return {
+      info: [],
       indexData: [],
       showData: {},
-      info: {},
-      items: [],
       isOpenEditDialog: false
     }
   },
@@ -81,8 +91,16 @@ export default {
       API.getShow(id)
       .then(response => {
         this.showData = response.data
+        // permissionだけの配列にする
         this.info = response.info.map(row => row.permission)
       })
+    },
+    updateShowData (column, value) {
+      console.log([column, value])
+    },
+    save () {
+      console.log(this.showData)
+      this.isOpenEditDialog = !this.isOpenEditDialog
     }
   }
 }

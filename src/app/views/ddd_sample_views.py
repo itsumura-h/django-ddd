@@ -23,18 +23,22 @@ class DDDSample:
 
     def show(request, id):
         user, options = DDDSampleService.show(id)
-        user = {
+        data = {
             'id': user['id'],
             'name': user['name'],
             'email': user['email'].get_label(),
             'permission': user['permission'].get_ja_label(),
-            'age': user['birth_date_db'].get_age()
+            'birth_date': user['birth_date_db'].get_str_number()
         }
-        options = [
+        info = [
             {
                 'id': val['id'],
                 'permission': val['permission'].get_ja_label(),
             }
             for val in options
         ]
-        return JsonResponse({'value': {'info': options, 'data': user}})
+        return JsonResponse({'value': {'info': info, 'data': data}})
+
+    def store(request, id):
+        params = request.POST
+        print(params)

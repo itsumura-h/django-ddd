@@ -9,6 +9,7 @@ from .views.test_views import TestViews
 ddd_sample_urls = [
     path('', DDDSample.index),
     path('<int:id>/', DDDSample.show),
+    path('<int:id>/store/', DDDSample.store),
 ]
 
 # sample_urls = [
