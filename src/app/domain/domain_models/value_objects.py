@@ -98,7 +98,6 @@ class BirthdateDBValueObject:
     def __init__(self, value):
         if isinstance(value, str):
             self.__value = datetime.strptime(value, '%Y-%m-%d')
-            print(self.__value)
 
     def get_date(self):
         return self.__value.isoformat()

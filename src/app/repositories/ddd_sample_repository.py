@@ -16,7 +16,7 @@ class DDDSampleRpository:
 
     @staticmethod
     def show(id):
-        return User \
+        user = User \
             .select(
                 "users.id", "users.name", "users.email", "users.birth_date",
                 "users.permission_id", "permissions.permission"
@@ -24,3 +24,6 @@ class DDDSampleRpository:
             .join('permissions', 'users.permission_id', '=', 'permissions.id') \
             .find(id) \
             .serialize()
+
+        options = Permission.all().serialize()
+        return user, options
