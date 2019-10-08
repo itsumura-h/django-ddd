@@ -20,8 +20,9 @@ class DDDSample:
         ]
         return JsonResponse({'value': users})
 
+
     def show(request, id):
-        user = DDDSampleService.show(id)
+        user, options = DDDSampleService.show(id)
         user = {
             'id': user['id'],
             'name': user['name'],
@@ -29,4 +30,11 @@ class DDDSample:
             'permission': user['permission'].get_ja_label(),
             'age': user['birth_date_db'].get_age()
         }
-        return JsonResponse({'value': user})
+        options = [
+            {
+                'id': val['id'],
+                'permission': val['permission'].get_ja_label(),
+            }
+            for val in options
+        ]
+        return JsonResponse({'value': {'info': options, 'data': user}})

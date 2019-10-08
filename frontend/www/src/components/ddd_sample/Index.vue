@@ -5,41 +5,47 @@
       <tr>
         <th>id</th><th>名前</th><th>メールアドレス</th><th>年齢</th>
       </tr>
-      <tr v-for="row in indexData" :key="row.id" @click.stop="dialog = true">
+      <tr v-for="row in indexData" :key="row.id" @click.stop="openEditDialog(row.id)">
         <td>{{row.id}}</td><td>{{row.name}}</td><td>{{row.email}}</td><td>{{row.age}}</td>
       </tr>
     </table>
 
     <!-- モーダル -->
     <v-dialog
-      v-model="dialog"
-      max-width="290"
+      v-model="isOpenEditDialog"
+      width="60vw"
     >
       <v-card>
-        <v-card-title class="headline">Use Google's location service?</v-card-title>
-
+        <v-card-title>
+          <span class="headline">ユーザー編集</span>
+        </v-card-title>
         <v-card-text>
-          Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field label="名前*" :value="showData.name" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Email*" :value="showData.email" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="生年月日*" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  :items="info"
+                  label="権限*"
+                  required
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
         </v-card-text>
-
         <v-card-actions>
           <div class="flex-grow-1"></div>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Disagree
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Agree
-          </v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -54,7 +60,10 @@ export default {
   data () {
     return {
       indexData: [],
-      dialog: false
+      showData: {},
+      info: {},
+      items: [],
+      isOpenEditDialog: false
     }
   },
   mounted () {
@@ -66,7 +75,14 @@ export default {
         .then(response => {
           this.indexData = response
         })
-      console.log(this.indexData)
+    },
+    openEditDialog (id) {
+      this.isOpenEditDialog = !this.isOpenEditDialog
+      API.getShow(id)
+      .then(response => {
+        this.showData = response.data
+        this.info = response.info.map(row => row.permission)
+      })
     }
   }
 }

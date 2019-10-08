@@ -16,14 +16,19 @@ class DDDSampleEntity:
                  updated_at: datetime = None):
         self.__id = id
         self.__name = name
-        self.__email = EmailValueObject(email)
+        self.__email = EmailValueObject(email) if email else None
         self.__password = password
-        self.__permission = PermissionValueObject(permission)
+        self.__permission = PermissionValueObject(permission) \
+                            if permission else None
         self.__permission_id = permission_id
-        self.__birth_date_db = BirthdateDBValueObject(birth_date_db)
-        self.__birth_date_input = BirthdateInputValueObject(birth_date_input)
-        self.__created_at = DatetimeValueObject(created_at)
-        self.__updated_at = DatetimeValueObject(updated_at)
+        self.__birth_date_db = BirthdateDBValueObject(birth_date_db) \
+                                if birth_date_db else None
+        self.__birth_date_input = BirthdateInputValueObject(birth_date_input) \
+                                    if birth_date_input else None
+        self.__created_at = DatetimeValueObject(created_at) \
+                            if created_at else None
+        self.__updated_at = DatetimeValueObject(updated_at) \
+                            if updated_at else None
 
     def to_dict(self):
         return {

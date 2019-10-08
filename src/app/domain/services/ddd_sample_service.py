@@ -4,7 +4,6 @@ from app.domain.domain_models.entities.ddd_sample_entity import DDDSampleEntity
 class DDDSampleService:
     def index():
         users = DDDSampleRpository.index()
-        print(users)
         users = [
             DDDSampleEntity(
                 id=val['id'],
@@ -19,17 +18,21 @@ class DDDSampleService:
         return users
 
     def show(id):
-        user = DDDSampleRpository.show(id)
-        print(user)
+        user, options = DDDSampleRpository.show(id)
         user = DDDSampleEntity(
             id=user['id'],
             name=user['name'],
             email=user['email'],
-            password=user['password'],
             birth_date_db=user['birth_date'],
-            created_at=user['created_at'],
-            updated_at=user['updated_at'],
             permission_id=user['permission_id'],
             permission=user['permission']
         ).to_dict()
-        return user
+
+        options = [
+            DDDSampleEntity(
+                id=val['id'],
+                permission=val['permission']
+            ).to_dict()
+            for val in options
+        ]
+        return user, options
