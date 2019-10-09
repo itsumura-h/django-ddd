@@ -25,7 +25,7 @@
               <v-col cols="12">
                 <v-text-field
                   label="名前"
-                  v-model="showData.name"
+                  v-model="showData['name']"
                   required
                 />
               </v-col>
@@ -48,8 +48,12 @@
                   label="権限"
                   v-model="showData.permission"
                   :items="info"
+                  item-key="permission"
+                  item-value="permission_id"
                   required
+                  @change="displayShowData"
                 />
+                {{ showData.permission }}
               </v-col>
             </v-row>
           </v-container>
@@ -78,6 +82,7 @@ export default {
   },
   mounted () {
     this.getIndex()
+    console.log([this.showData, this.info])
   },
   methods: {
     getIndex () {
@@ -89,18 +94,30 @@ export default {
     openEditDialog (id) {
       this.isOpenEditDialog = !this.isOpenEditDialog
       API.getShow(id)
-      .then(response => {
-        this.showData = response.data
-        // permissionだけの配列にする
-        this.info = response.info.map(row => row.permission)
-      })
+        .then(response => {
+          this.showData = response.data
+          // permissionだけの配列にする
+          this.info = response.meta.display.map(row => {
+            return (
+              {row['permission_id']: row['permission']}
+            )
+          })
+          console.log(this.info)
+        })
     },
     updateShowData (column, value) {
       console.log([column, value])
     },
     save () {
-      console.log(this.showData)
-      this.isOpenEditDialog = !this.isOpenEditDialog
+      API.update(this.showData)
+        .then(response => {
+          this.getIndex()
+          this.isOpenEditDialog = !this.isOpenEditDialog
+        })
+      // console.log(this.indexData)
+    },
+    displayShowData () {
+      console.log(this.showData.permission_id)
     }
   }
 }

@@ -13,4 +13,16 @@ export default class Util {
         console.error(err)
       })
   }
+
+  static putAPI=(url, params) => {
+    url = CONST.APIHOST + url
+    return axios
+      .put(url, params)
+      .then(response => {
+        return response.data.value
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 }

@@ -17,7 +17,23 @@ class EmailValueObject:
         return self.__value
 
 
-class PermissionValueObject:
+class PermissionJaValueObject:
+    def __init__(self, value):
+        self.__value = value
+
+    def get_en_label(self):
+        """権限の英語名を返すメソッド.
+
+        Returns:
+            str -- 権限の英語名
+        """
+        if self.__value == '管理者': 
+            return 'administrator'
+        elif self.__value == '一般':
+            return 'user'
+
+
+class PermissionEnValueObject:
     def __init__(self, value):
         self.__value = value
 
@@ -31,14 +47,6 @@ class PermissionValueObject:
             return '管理者'
         elif self.__value == 'user':
             return '一般'
-
-    def get_en_label(self):
-        """権限の英語名を返すメソッド.
-
-        Returns:
-            str -- 権限の英語名
-        """
-        return self.__value
 
 
 class DatetimeValueObject:
@@ -58,40 +66,6 @@ class DatetimeValueObject:
 
     def get_label(self):
         return self.__value.isoformat()
-
-
-class BirthdateValueObject:
-    """生年月日クラス:date/8文字のstr."""
-
-    def __init__(self, value):
-        if isinstance(value, date):
-            self.__value = value
-        elif isinstance(value, str):
-            # 8文字の数字
-            repattern = re.compile(r'[0-9]{8}')
-            is_match = repattern.match(value)
-            if not (is_match and len(value) == 8):
-                raise Exception(f'{value}は8文字の数字ではありません')
-
-            y = int(value[0:4])
-            m = int(value[4:6])
-            d = int(value[6:8])
-            self.__value = date(y, m, d)
-
-    def get_date(self):
-        return self.__value.isoformat()
-
-    def get_str_number(self):
-        y = str(self.__value.year)
-        m = str(self.__value.month).zfill(2)
-        d = str(self.__value.day).zfill(2)
-        return f'{y}{m}{d}'
-
-    def get_age(self):
-        today = date.today()
-        diff_days = (today - self.__value).days
-        diff_year = math.floor(diff_days / 365)
-        return diff_year
 
 
 class BirthdateDBValueObject:
@@ -116,4 +90,17 @@ class BirthdateDBValueObject:
 
 class BirthdateInputValueObject:
     def __init__(self, value):
-        self.__value = value
+        if isinstance(value, str):
+            # 8文字の数字
+            repattern = re.compile(r'[0-9]{8}')
+            is_match = repattern.match(value)
+            if not (is_match and len(value) == 8):
+                raise Exception(f'{value}は8文字の数字ではありません')
+
+            y = int(value[0:4])
+            m = int(value[4:6])
+            d = int(value[6:8])
+            self.__value = date(y, m, d)
+
+    def get_date(self):
+        return self.__value.isoformat()
