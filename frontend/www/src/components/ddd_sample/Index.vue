@@ -47,11 +47,11 @@
                 <v-select
                   label="権限"
                   v-model="showData.permission"
-                  :items="info"
-                  item-key="permission"
-                  item-value="permission_id"
+                  :items="permissions"
+                  item-text="label"
+                  item-value="id"
                   required
-                  @change="displayShowData"
+                  return-object
                 />
                 {{ showData.permission }}
               </v-col>
@@ -74,7 +74,7 @@ export default {
   name: 'Index',
   data () {
     return {
-      info: [],
+      permissions: [],
       indexData: [],
       showData: {},
       isOpenEditDialog: false
@@ -82,7 +82,6 @@ export default {
   },
   mounted () {
     this.getIndex()
-    console.log([this.showData, this.info])
   },
   methods: {
     getIndex () {
@@ -96,13 +95,7 @@ export default {
       API.getShow(id)
         .then(response => {
           this.showData = response.data
-          // permissionだけの配列にする
-          this.info = response.meta.display.map(row => {
-            return (
-              {row['permission_id']: row['permission']}
-            )
-          })
-          console.log(this.info)
+          this.permissions = response.meta.display.permission
         })
     },
     updateShowData (column, value) {
@@ -114,10 +107,9 @@ export default {
           this.getIndex()
           this.isOpenEditDialog = !this.isOpenEditDialog
         })
-      // console.log(this.indexData)
-    },
-    displayShowData () {
-      console.log(this.showData.permission_id)
+        .catch(err => {
+          ;
+        })
     }
   }
 }

@@ -43,9 +43,8 @@ class DDDSampleService:
             name=params['name'],
             email=params['email'],
             birth_date_input=params['birth_date'],
-            permission_id=params['permission_id'],
-            permission_ja=params['permission']
+            permission_id=params['permission_id']
         ).to_dict()
-        
+
         result = DDDSampleRpository.update(id, user)
         return result
