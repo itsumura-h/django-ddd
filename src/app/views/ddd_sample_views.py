@@ -46,8 +46,8 @@ class DDDSample:
         return JsonResponse({
             'value': {
                 'meta': {
-                    'display': {
-                        'permission': info  # 表示に必要なデータ
+                    'display': {  # 表示に必要なデータ
+                        'permission': info
                     }
                 },
                 'data': data  # 実際のデータ
