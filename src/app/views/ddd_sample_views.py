@@ -8,7 +8,7 @@ from app.domain.services.ddd_sample_service import DDDSampleService
 class DDDSample:
     @api_view(['GET'])
     def index(request):
-        users = DDDSampleService.index()
+        users, permissions = DDDSampleService.index()
         users = [
             {
                 'id': val['id'],
@@ -19,11 +19,29 @@ class DDDSample:
             }
             for val in users
         ]
-        return JsonResponse({'value': users})
+
+        permissions = [
+            {
+                'id': val['id'],
+                'label': val['permission_en'].get_ja_label(),
+            }
+            for val in permissions
+        ]
+
+        return JsonResponse({
+            'meta': {
+                'display': {
+                    'permissions': permissions
+                }
+            },
+            'data': {
+                'users': users
+            }
+        })
 
     @api_view(['GET'])
     def show(request, id):
-        user, options = DDDSampleService.show(id)
+        user, permissions = DDDSampleService.show(id)
         data = {
             'id': user['id'],
             'name': user['name'],
@@ -32,26 +50,24 @@ class DDDSample:
                 'id': user['permission_id'],
                 'label': user['permission_en'].get_ja_label(),
             },
-            # 'permission_id': user['permission_id'],
-            # 'permission': user['permission_en'].get_ja_label(),
             'birth_date': user['birth_date_db'].get_str_number()
         }
-        info = [
+
+        permissions = [
             {
                 'id': val['id'],
                 'label': val['permission_en'].get_ja_label(),
             }
-            for val in options
+            for val in permissions
         ]
+
         return JsonResponse({
-            'value': {
-                'meta': {
-                    'display': {  # 表示に必要なデータ
-                        'permission': info
-                    }
-                },
-                'data': data  # 実際のデータ
-            }
+            'meta': {
+                'display': {  # 表示に必要なデータ
+                    'permissions': permissions
+                }
+            },
+            'data': data  # 実際のデータ
         })
 
     @api_view(['PUT'])

@@ -1,16 +1,80 @@
 <template>
   <div>
     <h1>index</h1>
+    <p><v-btn color="green" @click="openCreateDialog"><span class="white--text">新規作成</span></v-btn></p>
     <table border="1">
       <tr>
         <th>id</th><th>名前</th><th>メールアドレス</th><th>年齢</th><th>権限</th><th>削除</th>
       </tr>
       <tr v-for="row in indexData" :key="row.id" @click.stop="openEditDialog(row.id)">
-        <td>{{row.id}}</td><td>{{row.name}}</td><td>{{row.email}}</td><td>{{row.age}}</td><td>{{row.permission}}</td><td><v-btn @click="openDeleteDialog(row.id)">削除</v-btn></td>
+        <td>{{row.id}}</td>
+        <td>{{row.name}}</td>
+        <td>{{row.email}}</td>
+        <td>{{row.age}}</td>
+        <td>{{row.permission}}</td>
+        <td>
+          <v-btn color="red" @click="openDeleteDialog(row.id)">
+            <span class="white--text">削除</span>
+          </v-btn>
+        </td>
       </tr>
     </table>
 
-    <!-- モーダル -->
+    <!-- 新規作成画面 -->
+    <v-dialog
+      v-model="isOpenCreateDialog"
+      width="60vw"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">ユーザー新規作成</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="名前"
+                  v-model="createData.name"
+                  required
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Email"
+                  v-model="createData.email"
+                  required
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="生年月日"
+                  v-model="createData.birth_date"
+                  required
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  label="権限"
+                  v-model="createData.permissions"
+                  :items="permissions"
+                  item-text="label"
+                  item-value="id"
+                  required
+                  return-object
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn color="blue" @click="confirm">確認</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- 編集画面 -->
     <v-dialog
       v-model="isOpenEditDialog"
       width="60vw"
@@ -22,24 +86,25 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.showData.name.$invalid }">
                 <v-text-field
                   label="名前"
-                  v-model="showData['name']"
+                  v-model="showData.name"
+                  v-model.trim="$v.showData.$model.name"
                   required
                 />
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.showData.email.$invalid }">
                 <v-text-field
                   label="Email"
-                  v-model="showData.email"
+                  v-model.trim="$v.showData.$model.email"
                   required
                 />
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.showData.birth_date.$invalid }">
                 <v-text-field
                   label="生年月日"
-                  v-model="showData.birth_date"
+                  v-model.trim="$v.showData.$model.birth_date"
                   required
                 />
               </v-col>
@@ -59,7 +124,7 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue" @click="confirm">確認</v-btn>
+          <v-btn color="blue" @click="confirm"><span class="white--text">確認</span></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -79,7 +144,7 @@
               <v-col cols="12">
                 <v-text-field
                   label="名前"
-                  v-model="showData['name']"
+                  v-model="showData.name"
                   readonly
                 />
               </v-col>
@@ -113,7 +178,7 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="save">更新</v-btn>
+          <v-btn color="blue" @click="save"><span class="white--text">更新</span></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -129,7 +194,7 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            削除しますか？
+            ID:{{deleteId}}を削除しますか？
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -143,9 +208,20 @@
   </div>
 </template>
 
+<style scoped>
+.form-group--error {
+  background-color: lightcoral;
+}
+</style>
+
 <script>
 import API from '../../common/API'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { 
+  required, 
+  integer, 
+  minLength, 
+  maxLength
+} from 'vuelidate/lib/validators'
 
 export default {
   name: 'Index',
@@ -153,7 +229,14 @@ export default {
     return {
       permissions: [],
       indexData: [],
+      createData: {
+        name: '',
+        email: '',
+        birth_date: '',
+        permission: 1
+      },
       showData: {},
+      isOpenCreateDialog: false,
       isOpenEditDialog: false,
       isOpenConfirmDialog: false,
       isOpenDeleteDialog: false,
@@ -162,7 +245,15 @@ export default {
   },
   validations: {
     showData: {
+      name: {
+        required
+      },
+      email: {
+        required
+      },
       birth_date: {
+        required,
+        integer,
         minLength: minLength(8),
         maxLength: maxLength(8)
       }
@@ -172,12 +263,20 @@ export default {
     this.getIndex()
   },
   methods: {
+    // ==================== index ====================
     getIndex () {
       API.getIndex()
         .then(response => {
-          this.indexData = response
+          this.permissions = response.meta.display.permissions
+          this.indexData = response.data.users
         })
     },
+    // ==================== create ====================
+    openCreateDialog () {
+      console.log('openCreateDialog')
+      this.isOpenCreateDialog = !this.isOpenCreateDialog
+    },
+    // ==================== edit ====================
     openEditDialog (id) {
       this.isOpenEditDialog = !this.isOpenEditDialog
       if (this.isOpenDeleteDialog) {
@@ -186,7 +285,7 @@ export default {
       API.getShow(id)
         .then(response => {
           this.showData = response.data
-          this.permissions = response.meta.display.permission
+          this.permissions = response.meta.display.permissions
         })
     },
     updateShowData (column, value) {
@@ -203,13 +302,14 @@ export default {
           this.isOpenEditDialog = !this.isOpenEditDialog
         })
         .catch(err => {
-          console.log(err)
+          console.error(err)
         })
     },
+    // ==================== delete ====================
     openDeleteDialog (id) {
       this.isOpenDeleteDialog = !this.isOpenDeleteDialog
       this.deleteId = id
-      console.log(id)
+      console.log(this.deleteId)
     },
     deleteUser () {
       console.log('削除')

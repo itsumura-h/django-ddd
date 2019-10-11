@@ -15,10 +15,19 @@ class DDDSampleService:
             ).to_dict()
             for val in users
         ]
-        return users
+
+        permissions = DDDSampleRpository.permissions_index()
+        permissions = [
+            DDDSampleEntity(
+                id=val['id'],
+                permission_en=val['permission']
+            ).to_dict()
+            for val in permissions
+        ]
+        return users, permissions
 
     def show(id):
-        user, options = DDDSampleRpository.show(id)
+        user = DDDSampleRpository.show(id)
         user = DDDSampleEntity(
             id=user['id'],
             name=user['name'],
@@ -28,14 +37,16 @@ class DDDSampleService:
             permission_en=user['permission']
         ).to_dict()
 
-        options = [
+        permissions = DDDSampleRpository.permissions_index()
+        permissions = [
             DDDSampleEntity(
                 id=val['id'],
                 permission_en=val['permission']
             ).to_dict()
-            for val in options
+            for val in permissions
         ]
-        return user, options
+
+        return user, permissions
 
     def update(id, params):
         user = DDDSampleEntity(

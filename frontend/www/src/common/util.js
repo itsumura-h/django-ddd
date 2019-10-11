@@ -7,7 +7,7 @@ export default class Util {
     return axios
       .get(url)
       .then(response => {
-        return response.data.value
+        return response.data
       })
       .catch(err => {
         console.error(err)
@@ -19,7 +19,7 @@ export default class Util {
     return axios
       .put(url, params)
       .then(response => {
-        return response.data.value
+        return response.data
       })
       .catch(err => {
         console.log(err)

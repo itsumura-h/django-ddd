@@ -5,6 +5,10 @@ from datetime import datetime
 class DDDSampleRpository:
 
     @staticmethod
+    def permissions_index():
+        return Permission.all().serialize()
+
+    @staticmethod
     def index():
         return User \
             .select(
@@ -26,8 +30,7 @@ class DDDSampleRpository:
             .find(id) \
             .serialize()
 
-        options = Permission.all().serialize()
-        return user, options
+        return user
 
     @staticmethod
     def update(id, params):
