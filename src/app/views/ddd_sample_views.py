@@ -39,6 +39,12 @@ class DDDSample:
             }
         })
 
+    @api_view(['POST'])
+    def create(request):
+        params = request.data
+        print(params)
+        DDDSampleService().create(params)
+
     @api_view(['GET'])
     def show(request, id):
         user, permissions = DDDSampleService.show(id)

@@ -14,6 +14,18 @@ export default class Util {
       })
   }
 
+  static postAPI=(url, params) => {
+    url = CONST.APIHOST + url
+    return axios
+      .post(url, params)
+      .then(response => {
+        return response.data
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
   static putAPI=(url, params) => {
     url = CONST.APIHOST + url
     return axios
@@ -22,7 +34,7 @@ export default class Util {
         return response.data
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
       })
   }
 }

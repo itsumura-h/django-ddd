@@ -11,6 +11,11 @@ export default class API {
     return Util.getAPI(url)
   }
 
+  static create = (params) => {
+    const url = '/api/ddd_sample/create/'
+    return Util.postAPI(url, params)
+  }
+
   static update= (params) => {
     const url = `/api/ddd_sample/${params.id}/update/`
     return Util.putAPI(url, params)

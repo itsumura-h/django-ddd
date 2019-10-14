@@ -26,6 +26,9 @@ class DDDSampleService:
         ]
         return users, permissions
 
+    def create(params):
+        print(params)
+
     def show(id):
         user = DDDSampleRpository.show(id)
         user = DDDSampleEntity(

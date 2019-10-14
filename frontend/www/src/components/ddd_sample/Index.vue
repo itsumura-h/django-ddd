@@ -32,31 +32,31 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.createData.name.$invalid }">
                 <v-text-field
                   label="名前"
-                  v-model="createData.name"
+                  v-model="$v.createData.$model.name"
                   required
                 />
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.createData.email.$invalid }">
                 <v-text-field
                   label="Email"
-                  v-model="createData.email"
+                  v-model="$v.createData.$model.email"
                   required
                 />
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.createData.birth_date.$invalid }">
                 <v-text-field
                   label="生年月日"
                   v-model="createData.birth_date"
                   required
                 />
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" :class="{ 'form-group--error': $v.createData.permission.$invalid }">
                 <v-select
                   label="権限"
-                  v-model="createData.permissions"
+                  v-model="$v.createData.$model.permission"
                   :items="permissions"
                   item-text="label"
                   item-value="id"
@@ -69,7 +69,61 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue" @click="confirm">確認</v-btn>
+          <v-btn color="blue" @click="confirmCreate" :disabled="$v.createData.$invalid">確認</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- 新規作成確認画面 -->
+    <v-dialog
+      v-model="isOpenCreateConfirmDialog"
+      width="60vw"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">ユーザー新規作成確認</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="名前"
+                  v-model="createData.name"
+                  readonly
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Email"
+                  v-model="createData.email"
+                  readonly
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="生年月日"
+                  v-model.trim="createData.birth_date"
+                  readonly
+                  class="form__input"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  label="権限"
+                  v-model="createData.permission"
+                  :items="permissions"
+                  item-text="label"
+                  item-value="id"
+                  readonly
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn color="blue" @click="savCreate"><span class="white--text">作成</span></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -124,14 +178,15 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue" @click="confirm"><span class="white--text">確認</span></v-btn>
+          <v-btn color="blue" @click="confirmEdit" :disabled="$v.showData.$invalid"><span class="white--text">確認</span></v-btn>
         </v-card-actions>
+        <pre>{{$v}}</pre>
       </v-card>
     </v-dialog>
 
     <!-- 確認画面 -->
     <v-dialog
-      v-model="isOpenConfirmDialog"
+      v-model="isOpenConfirmEditDialog"
       width="60vw"
     >
       <v-card>
@@ -178,7 +233,7 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue" @click="save"><span class="white--text">更新</span></v-btn>
+          <v-btn color="blue" @click="saveEdit"><span class="white--text">更新</span></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -216,10 +271,11 @@
 
 <script>
 import API from '../../common/API'
-import { 
-  required, 
-  integer, 
-  minLength, 
+import {
+  required,
+  email,
+  integer,
+  minLength,
   maxLength
 } from 'vuelidate/lib/validators'
 
@@ -233,12 +289,13 @@ export default {
         name: '',
         email: '',
         birth_date: '',
-        permission: 1
+        permission: {}
       },
       showData: {},
       isOpenCreateDialog: false,
+      isOpenCreateConfirmDialog: false,
       isOpenEditDialog: false,
-      isOpenConfirmDialog: false,
+      isOpenConfirmEditDialog: false,
       isOpenDeleteDialog: false,
       deleteId: 0
     }
@@ -249,13 +306,32 @@ export default {
         required
       },
       email: {
-        required
+        required,
+        email
       },
       birth_date: {
         required,
         integer,
         minLength: minLength(8),
         maxLength: maxLength(8)
+      }
+    },
+    createData: {
+      name: {
+        required
+      },
+      email: {
+        required,
+        email
+      },
+      birth_date: {
+        required,
+        integer,
+        minLength: minLength(8),
+        maxLength: maxLength(8)
+      },
+      permission: {
+        required
       }
     }
   },
@@ -276,6 +352,12 @@ export default {
       console.log('openCreateDialog')
       this.isOpenCreateDialog = !this.isOpenCreateDialog
     },
+    confirmCreate () {
+      this.isOpenCreateConfirmDialog = !this.isOpenCreateConfirmDialog
+    },
+    saveCreate () {
+      console.log('saveCreate')
+    },
     // ==================== edit ====================
     openEditDialog (id) {
       this.isOpenEditDialog = !this.isOpenEditDialog
@@ -291,14 +373,14 @@ export default {
     updateShowData (column, value) {
       console.log([column, value])
     },
-    confirm () {
-      this.isOpenConfirmDialog = !this.isOpenConfirmDialog
+    confirmEdit () {
+      this.isOpenConfirmEditDialog = !this.isOpenConfirmEditDialog
     },
-    save () {
+    saveEdit () {
       API.update(this.showData)
         .then(response => {
           this.getIndex()
-          this.isOpenConfirmDialog = !this.isOpenConfirmDialog
+          this.isOpenConfirmEditDialog = !this.isOpenConfirmEditDialog
           this.isOpenEditDialog = !this.isOpenEditDialog
         })
         .catch(err => {
