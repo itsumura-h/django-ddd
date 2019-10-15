@@ -20,4 +20,9 @@ export default class API {
     const url = `/api/ddd_sample/${params.id}/update/`
     return Util.putAPI(url, params)
   }
+
+  static delete= (id) => {
+    const url = `/api/ddd_sample/${id}/delete/`
+    return Util.deleteAPI(url)
+  }
 }

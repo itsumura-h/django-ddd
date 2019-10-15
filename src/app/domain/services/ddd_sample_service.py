@@ -1,7 +1,22 @@
+from  django.contrib.auth.hashers import make_password
+from datetime import datetime
 from app.repositories.ddd_sample_repository import DDDSampleRpository
 from app.domain.domain_models.entities.ddd_sample_entity import DDDSampleEntity
 
 class DDDSampleService:
+    def create(params):
+        user = DDDSampleEntity(
+            name=params['name'],
+            email=params['email'],
+            password=make_password(params['email']),
+            birth_date_input=params['birth_date'],
+            permission_id=params['permission_id'],
+            created_at=datetime.now(),
+            updated_at=datetime.now()
+        ).to_dict()
+        return DDDSampleRpository.create(user)
+
+
     def index():
         users = DDDSampleRpository.index()
         users = [
@@ -25,9 +40,6 @@ class DDDSampleService:
             for val in permissions
         ]
         return users, permissions
-
-    def create(params):
-        print(params)
 
     def show(id):
         user = DDDSampleRpository.show(id)
@@ -62,3 +74,6 @@ class DDDSampleService:
 
         result = DDDSampleRpository.update(id, user)
         return result
+
+    def delete(id):
+        DDDSampleRpository.delete(id)

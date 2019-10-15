@@ -37,4 +37,16 @@ export default class Util {
         console.error(err)
       })
   }
+
+  static deleteAPI=(url) => {
+    url = CONST.APIHOST + url
+    return axios
+      .delete(url)
+      .then(response => {
+        return response.data
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
 }

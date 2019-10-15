@@ -11,6 +11,7 @@ ddd_sample_urls = [
     path('create/', DDDSample.create),
     path('<int:id>/', DDDSample.show),
     path('<int:id>/update/', DDDSample.update),
+    path('<int:id>/delete/', DDDSample.delete)
 ]
 
 # sample_urls = [

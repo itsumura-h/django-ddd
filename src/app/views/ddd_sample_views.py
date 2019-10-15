@@ -42,8 +42,14 @@ class DDDSample:
     @api_view(['POST'])
     def create(request):
         params = request.data
-        print(params)
-        DDDSampleService().create(params)
+        params['permission_id'] = params['permission']['id']
+        # DDDSampleService.create(params)
+        try:
+            DDDSampleService.create(params)
+            return JsonResponse({'status': True})
+        except Exception as e:
+            return JsonResponse({'status': str(e)})
+
 
     @api_view(['GET'])
     def show(request, id):
@@ -86,9 +92,16 @@ class DDDSample:
             'permission_id': params['permission']['id'],
             'birth_date': params['birth_date']
         }
-        # DDDSampleService.update(id, params)
         try:
             result = DDDSampleService.update(id, params)
-            return JsonResponse({'value': {'result': result}})
+            return JsonResponse({'result': result})
         except Exception as e:
-            return JsonResponse({'value': {'status': str(e)}})
+            return JsonResponse({'status': str(e)})
+
+    @api_view(['DELETE'])
+    def delete(request, id):
+        try:
+            DDDSampleService.delete(id)
+            return JsonResponse({'status': True})
+        except Exception as e:
+            return JsonResponse({'status': str(e)})

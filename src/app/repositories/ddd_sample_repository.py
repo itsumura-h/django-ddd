@@ -9,6 +9,22 @@ class DDDSampleRpository:
         return Permission.all().serialize()
 
     @staticmethod
+    def create(params):
+        user = {
+            'name': params['name'],
+            'email': params['email'].get_label(),
+            'password': params['password'],
+            'birth_date': params['birth_date_input'].get_date(),
+            'permission_id': params['permission_id'],
+            'created_at': params['created_at'].get_label(),
+            'updated_at': params['updated_at'].get_label()
+        }
+        print(user)
+        return User \
+            .insert(user)
+
+
+    @staticmethod
     def index():
         return User \
             .select(
@@ -48,3 +64,7 @@ class DDDSampleRpository:
             .update(params)
 
         return User.find(id).serialize()
+
+    @staticmethod
+    def delete(id):
+        User.where('id', id).delete()

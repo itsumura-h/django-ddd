@@ -123,7 +123,7 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue" @click="savCreate"><span class="white--text">作成</span></v-btn>
+          <v-btn color="blue" @click="saveCreate"><span class="white--text">作成</span></v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -180,7 +180,6 @@
           <div class="flex-grow-1"></div>
           <v-btn color="blue" @click="confirmEdit" :disabled="$v.showData.$invalid"><span class="white--text">確認</span></v-btn>
         </v-card-actions>
-        <pre>{{$v}}</pre>
       </v-card>
     </v-dialog>
 
@@ -254,7 +253,6 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="deleteCancel">キャンセル</v-btn>
           <v-btn color="blue darken-1" text @click="deleteUser">削除</v-btn>
         </v-card-actions>
       </v-card>
@@ -357,6 +355,15 @@ export default {
     },
     saveCreate () {
       console.log('saveCreate')
+      API.create(this.createData)
+        .then(respinse => {
+          this.getIndex()
+          this.isOpenCreateConfirmDialog = !this.isOpenCreateConfirmDialog
+          this.isOpenCreateDialog = !this.isOpenCreateDialog
+        })
+        .catch(err => {
+          console.error(err)
+        })
     },
     // ==================== edit ====================
     openEditDialog (id) {
@@ -391,14 +398,16 @@ export default {
     openDeleteDialog (id) {
       this.isOpenDeleteDialog = !this.isOpenDeleteDialog
       this.deleteId = id
-      console.log(this.deleteId)
     },
     deleteUser () {
-      console.log('削除')
-      this.isOpenDeleteDialog = !this.isOpenDeleteDialog
-    },
-    deleteCancel () {
-      this.isOpenDeleteDialog = !this.isOpenDeleteDialog
+      API.delete(this.deleteId)
+        .then(response => {
+          this.getIndex()
+          this.isOpenDeleteDialog = !this.isOpenDeleteDialog
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }
